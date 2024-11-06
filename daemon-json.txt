@@ -1,0 +1,14 @@
+{
+"bip": "8.8.8.1/24",
+"default-address-pools": [
+    {"base": "8.8.0.0/16", "size": 24}
+],
+"insecure-registries": [
+        "111.9.54.250:8082",
+        "cdhr:8082",
+        "172.39.8.215:5000",
+        "172.39.8.65:8082"
+    ],
+"log-driver":"json-file",
+"log-opts": {"max-size":"10m", "max-file":"10"}
+}

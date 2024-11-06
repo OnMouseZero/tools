@@ -1,0 +1,23 @@
+#测试文件内容是否报错
+helm lint --strict platform-staging/
+
+#从目录文件安装
+helm install platform-staging --namespace=quality-platform --create-namespace platform-staging/
+
+#打包目录文件
+helm package platform-staging
+
+#推送包
+curl -v -u zyapeng:Jayson-zhao-0913 --upload-file platform-staging-0.1.0.tgz https://repos.infervision.com/repository/kubernetes-helm/
+
+#添加仓库
+helm repo add nexus https://repos.infervision.com/repository/kubernetes-helm/
+
+#导出values
+helm show values nexus/nextcloud > nexus-nextcloud.yaml
+
+#修改配置文件安装服务
+helm install gitlab-runner --values devops-gitlab-runner.yaml nexus/gitlab-runner --namespace=devops-gitops
+
+#更新配置文件更新服务
+helm upgrade gitlab-runner --values devops-gitlab-runner.yaml nexus/gitlab-runner --namespace=devops-gitops

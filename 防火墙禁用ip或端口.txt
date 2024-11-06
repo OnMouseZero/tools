@@ -1,0 +1,18 @@
+以下所有是针对iptables的DOCKER-USER链路
+
+##################################
+iptables  -t filter  -I DOCKER-USER -i  eth0 -p tcp --dport 27017  -j DROP
+iptables  -t filter  -I DOCKER-USER -i   eth0  -s   172.39.9.14  -p tcp --dport 27017 -j ACCEPT
+
+#不生效，因为DOCKER-USER链路在INPUT链路之前
+#在FORWARD链路的第一条规则就是引用了DOCEKR-USER链路的规则
+#由于数据包被更改了目标地址，于是路由策略将该包导向了FORWARD链。所以我们在INPUT链中再怎么定义规则，都无法限制外网对docker服务的访问。
+#所以需要在FORWARD链中添加拦路虎，那么就直接在DOCEKR-USER链路增加规则
+
+#外界访问Docker容器服务时，iptables的处理流程大致为：PREROUTING → DOCKER 或 DOCKER-USER → FORWARD → POSTROUTING
+iptables  -t filter  -I INPUT -i  eth0 -p tcp --dport 27017  -j DROP
+iptables  -t filter  -I INPUT -i   eth0  -s   172.39.9.14  -p tcp --dport 27017 -j ACCEPT
+
+yum install iptables iptables-services -y
+
+service iptables save

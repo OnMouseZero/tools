@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: "node_exporter_node1"
+    restart: always
+    privileged: true
+    ports:
+      - 9100:9100
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+  cadvisor:
+    image: google/cadvisor
+    container_name: "cadvisor_node1"
+    restart: always
+    privileged: true
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 8.8.99.0/24
+        - gateway: 8.8.99.1

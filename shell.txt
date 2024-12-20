@@ -1,5 +1,8 @@
 C:\Users\liudong\Documents\Tencent Files\295136176
 
+#clash启动没有mmdb，需要手动下载
+https://cdn.jsdelivr.net/gh/Dreamacro/maxmind-geoip@release/Country.mmdb
+
 #备份数据库，或者数据表
 --skip-set-charset  或者  --default-character-set=utf8mb4
 docker exec mysql  sh -c 'exec mysqldump  --skip-set-charset --all-databases -uroot -p123456 --all-databases' > /var/backup/music_`date +%F`.sql
